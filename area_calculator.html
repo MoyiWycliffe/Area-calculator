@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Area Calculator</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #eef2f7;
+      padding: 20px;
+    }
+
+    .calculator {
+      max-width: 500px;
+      margin: auto;
+      background: #fff;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+    }
+
+    h2 {
+      text-align: center;
+      color: #333;
+    }
+
+    label, select, input {
+      display: block;
+      width: 100%;
+      margin-top: 10px;
+      padding: 10px;
+      font-size: 16px;
+    }
+
+    input {
+      margin-bottom: 10px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #0056b3;
+    }
+
+    #result {
+      margin-top: 20px;
+      text-align: center;
+      font-weight: bold;
+    }
+
+    .inputs {
+      margin-top: 15px;
+    }
+  </style>
+</head>
+<body>
+  <div class="calculator">
+    <h2>Area Calculator</h2>
+
+    <label for="shape">Select Shape:</label>
+    <select id="shape" onchange="renderInputs()">
+      <option value="">--Choose a shape--</option>
+      <option value="square">Square</option>
+      <option value="rectangle">Rectangle</option>
+      <option value="triangle">Triangle</option>
+      <option value="circle">Circle</option>
+      <option value="parallelogram">Parallelogram</option>
+      <option value="trapezium">Trapezium</option>
+      <option value="rhombus">Rhombus</option>
+      <option value="ellipse">Ellipse</option>
+      <option value="kite">Kite</option>
+      <option value="pentagon">Pentagon</option>
+      <option value="hexagon">Hexagon</option>
+      <option value="heptagon">Heptagon</option>
+      <option value="octagon">Octagon</option>
+      <option value="nonagon">Nonagon</option>
+      <option value="decagon">Decagon</option>
+      <option value="sector">Sector of a Circle</option>
+      <option value="right_triangle">Right Triangle</option>
+      <option value="equilateral_triangle">Equilateral Triangle</option>
+      <option value="scalene_triangle">Scalene Triangle</option>
+    </select>
+
+    <div class="inputs" id="inputsArea"></div>
+
+    <button onclick="calculateArea()">Calculate Area</button>
+
+    <div id="result"></div>
+  </div>
+
+  <script>
+    function renderInputs() {
+      const shape = document.getElementById('shape').value;
+      const inputsDiv = document.getElementById('inputsArea');
+      inputsDiv.innerHTML = '';
+
+      const createInput = (id, placeholder) => {
+        return `<input type="number" id="${id}" placeholder="${placeholder}" required/>`;
+      };
+
+      const shapes = {
+        square: [createInput('side', 'Enter side')],
+        rectangle: [createInput('length', 'Enter length'), createInput('width', 'Enter width')],
+        triangle: [createInput('base', 'Enter base'), createInput('height', 'Enter height')],
+        circle: [createInput('radius', 'Enter radius')],
+        parallelogram: [createInput('base', 'Enter base'), createInput('height', 'Enter height')],
+        trapezium: [createInput('a', 'Enter base 1'), createInput('b', 'Enter base 2'), createInput('height', 'Enter height')],
+        rhombus: [createInput('d1', 'Enter diagonal 1'), createInput('d2', 'Enter diagonal 2')],
+        ellipse: [createInput('a', 'Enter semi-major axis'), createInput('b', 'Enter semi-minor axis')],
+        kite: [createInput('d1', 'Enter diagonal 1'), createInput('d2', 'Enter diagonal 2')],
+        pentagon: [createInput('side', 'Enter side')],
+        hexagon: [createInput('side', 'Enter side')],
+        heptagon: [createInput('side', 'Enter side')],
+        octagon: [createInput('side', 'Enter side')],
+        nonagon: [createInput('side', 'Enter side')],
+        decagon: [createInput('side', 'Enter side')],
+        sector: [createInput('radius', 'Enter radius'), createInput('angle', 'Enter angle in degrees')],
+        right_triangle: [createInput('base', 'Enter base'), createInput('height', 'Enter height')],
+        equilateral_triangle: [createInput('side', 'Enter side')],
+        scalene_triangle: [createInput('a', 'Side A'), createInput('b', 'Side B'), createInput('c', 'Side C')]
+      };
+
+      if (shapes[shape]) {
+        inputsDiv.innerHTML = shapes[shape].join('');
+      }
+    }
+
+    function calculateArea() {
+      const shape = document.getElementById('shape').value;
+      let area = 0;
+
+      const val = id => parseFloat(document.getElementById(id)?.value) || 0;
+      const π = Math.PI;
+
+      switch (shape) {
+        case 'square':
+          area = val('side') ** 2;
+          break;
+        case 'rectangle':
+          area = val('length') * val('width');
+          break;
+        case 'triangle':
+        case 'right_triangle':
+          area = 0.5 * val('base') * val('height');
+          break;
+        case 'circle':
+          area = π * val('radius') ** 2;
+          break;
+        case 'parallelogram':
+          area = val('base') * val('height');
+          break;
+        case 'trapezium':
+          area = 0.5 * (val('a') + val('b')) * val('height');
+          break;
+        case 'rhombus':
+        case 'kite':
+          area = 0.5 * val('d1') * val('d2');
+          break;
+        case 'ellipse':
+          area = π * val('a') * val('b');
+          break;
+        case 'pentagon':
+          area = (5 * val('side') ** 2) / (4 * Math.tan(π / 5));
+          break;
+        case 'hexagon':
+          area = (3 * Math.sqrt(3) * val('side') ** 2) / 2;
+          break;
+        case 'heptagon':
+          area = (7 * val('side') ** 2) / (4 * Math.tan(π / 7));
+          break;
+        case 'octagon':
+          area = (2 * (1 + Math.sqrt(2)) * val('side') ** 2);
+          break;
+        case 'nonagon':
+          area = (9 * val('side') ** 2) / (4 * Math.tan(π / 9));
+          break;
+        case 'decagon':
+          area = (10 * val('side') ** 2) / (4 * Math.tan(π / 10));
+          break;
+        case 'sector':
+          area = 0.5 * val('radius') ** 2 * (val('angle') * (π / 180));
+          break;
+        case 'equilateral_triangle':
+          area = (Math.sqrt(3) / 4) * val('side') ** 2;
+          break;
+        case 'scalene_triangle':
+          const a = val('a'), b = val('b'), c = val('c');
+          const s = (a + b + c) / 2;
+          area = Math.sqrt(s * (s - a) * (s - b) * (s - c));
+          break;
+        default:
+          document.getElementById('result').innerText = "Please select a valid shape.";
+          return;
+      }
+
+      document.getElementById('result').innerText = `Area: ${area.toFixed(2)} square units`;
+    }
+  </script>
+</body>
+</html>
